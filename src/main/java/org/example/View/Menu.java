@@ -20,18 +20,19 @@ public class Menu extends JFrame {
 
         JFileChooser fileChooser = new JFileChooser();
 
-        Color topBackgroundColor = new Color(0,255,0);
-        Color centerBackgroundColor = new Color(0,0,255);
-        Color bottomBackgroundColor = new Color(255,0,0);
+        Color topBackgroundColor = new Color(79,80,84);
+        Color centerBackgroundColor = new Color(32,33,37);
+        Color bottomBackgroundColor = new Color(22,23,27);
 
         JLabel author = new JLabel("Created by MerQury");
         JLabel title = new JLabel("Java Compiler");
+        title.setForeground(new Color(1,176,117));
         title.setFont(new Font(author.getFont().getName(), Font.BOLD, 25));
-        MqTextArea urlToJar = new MqTextArea("jar",5, Color.white);
-        MqTextArea urlToExe = new MqTextArea("exe",5, Color.white);
-        MqTextArea urlToIcon = new MqTextArea("ico",5, Color.white);
-        MqTextArea urlToConfig = new MqTextArea("json",5, Color.white);
-        MqTextArea processName = new MqTextArea("name",5, Color.white);
+        JTextField urlToJar = new JTextField("jar",21);
+        JTextField urlToExe = new JTextField("exe",21);
+        JTextField urlToIcon = new JTextField("ico",21);
+        JTextField urlToConfig = new JTextField("json",21);
+        JTextField processName = new JTextField("name",21);
 
         JCheckBox excludeCliCheckbox = new JCheckBox();
         excludeCliCheckbox.setBackground(centerBackgroundColor);
@@ -62,10 +63,10 @@ public class Menu extends JFrame {
         add(useCustomConfigCheckbox, grid(1,13,1,1));
         add(excludeCliText, grid(2,15,4,1));
         add(useCustomConfigText, grid(2,13,13,1));
-        add(urlToJar, grid(1,5,11,1));
-        add(urlToExe, grid(1,7,11,1));
-        add(urlToIcon, grid(1,9,11,1));
-        add(processName, grid(1,11,11,1));
+        add(urlToJar, grid(1,5,12,1));
+        add(urlToExe, grid(1,7,12,1));
+        add(urlToIcon, grid(1,9,12,1));
+        add(processName, grid(1,11,12,1));
 
         add(topBackground, grid(0,0,16,4));
         add(cmdBackground, grid(0,18,16,4));
