@@ -33,12 +33,14 @@ public class Menu extends JFrame {
         MqTextArea urlToConfig = new MqTextArea("json",5, Color.white);
         MqTextArea processName = new MqTextArea("name",5, Color.white);
 
-        JCheckBox excludeCli = new JCheckBox("Exclude CLI");
-        excludeCli.setBackground(centerBackgroundColor);
-        excludeCli.setForeground(Color.WHITE);
-        JCheckBox useCustomConfig = new JCheckBox("Use custom config\n(required for reflection)");
-        useCustomConfig.setBackground(centerBackgroundColor);
-        useCustomConfig.setForeground(Color.white);
+        JCheckBox excludeCliCheckbox = new JCheckBox();
+        excludeCliCheckbox.setBackground(centerBackgroundColor);
+        JLabel excludeCliText = new JLabel("Exclude CLI");
+        excludeCliText.setForeground(Color.WHITE);
+        JCheckBox useCustomConfigCheckbox = new JCheckBox();
+        JLabel useCustomConfigText = new JLabel("Use custom config (required for reflection)");
+        useCustomConfigCheckbox.setBackground(centerBackgroundColor);
+        useCustomConfigText.setForeground(Color.white);
 
         JPanel topBackground = new JPanel();
         topBackground.setPreferredSize(new Dimension(16*dotSize, 4*dotSize));
@@ -56,8 +58,10 @@ public class Menu extends JFrame {
         add(author, grid(8,0,10,1));
         add(title, grid(4,1,9,2));
         add(compile, grid(11,16,4,1));
-        add(excludeCli, grid(1,16,5,1));
-        add(useCustomConfig, grid(1,13,14,1));
+        add(excludeCliCheckbox, grid(1,15,1,1));
+        add(useCustomConfigCheckbox, grid(1,13,1,1));
+        add(excludeCliText, grid(2,15,4,1));
+        add(useCustomConfigText, grid(2,13,13,1));
         add(urlToJar, grid(1,5,11,1));
         add(urlToExe, grid(1,7,11,1));
         add(urlToIcon, grid(1,9,11,1));
