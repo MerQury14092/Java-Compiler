@@ -11,7 +11,7 @@ public class Menu extends JFrame {
         setResizable(false);
         GridBagLayout gridLayout = new GridBagLayout();
         setLayout(gridLayout);
-        int dotSize = 20;
+        int dotSize = 21;
         gridLayout.columnWidths = IntStream.generate(() -> dotSize).limit(16).toArray();
         gridLayout.rowHeights = IntStream.generate(() -> dotSize).limit(22).toArray();
         setTitle("JCompiler");
@@ -28,11 +28,11 @@ public class Menu extends JFrame {
         JLabel title = new JLabel("Java Compiler");
         title.setForeground(new Color(1,176,117));
         title.setFont(new Font(author.getFont().getName(), Font.BOLD, 25));
-        JTextField urlToJar = new JTextField("jar",21);
-        JTextField urlToExe = new JTextField("exe",21);
-        JTextField urlToIcon = new JTextField("ico",21);
-        JTextField urlToConfig = new JTextField("json",21);
-        JTextField processName = new JTextField("name",21);
+        JTextField urlToJar = new JTextField("jar",22);
+        JTextField urlToExe = new JTextField("exe",22);
+        JTextField urlToIcon = new JTextField("ico",22);
+        JTextField urlToConfig = new JTextField("json",22);
+        JTextField processName = new JTextField("name",22);
 
         JCheckBox excludeCliCheckbox = new JCheckBox();
         excludeCliCheckbox.setBackground(centerBackgroundColor);
