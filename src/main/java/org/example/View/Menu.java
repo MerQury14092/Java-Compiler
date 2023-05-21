@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -15,6 +16,8 @@ import java.util.stream.IntStream;
 
 public class Menu extends JFrame implements CommandOutput {
     private final JTextArea cmdOutput;
+    private MqButton compile;
+    private final ActionListener buttonActionListener;
     private final GridBagConstraints locator;
     public Menu(String initUrlToJar) throws IOException {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -97,7 +100,7 @@ public class Menu extends JFrame implements CommandOutput {
         cmdBackground.setPreferredSize(new Dimension(16*dotSize, 4*dotSize));
         cmdBackground.setBackground(bottomBackgroundColor);
 
-        MqButton compile = new MqButton("Compile", Color.white, new Dimension(60,20));
+        compile = new MqButton("compile", Color.white, new Dimension(60,20));
 
         MqButton jarFileChoose = new MqButton(fileChooserIcon, new Dimension(21,21));
         jarFileChoose.setActionListener((e) -> {
@@ -131,10 +134,21 @@ public class Menu extends JFrame implements CommandOutput {
                 urlToConfig.setText(fileChooser.getSelectedFile().getPath());
         });
 
-        CommandInterpreter interpreter = new Compiler();
-        compile.setActionListener((e) ->
-            interpreter.run(this, urlToJar.getText(), urlToExe.getText(), urlToIcon.getText(), urlToConfig.getText(), excludeCliCheckbox.isSelected()+"")
-        );
+        Compiler interpreter = new Compiler();
+        buttonActionListener = (e) -> {
+            interpreter.run(this,
+                    urlToJar.getText(),
+                    urlToExe.getText(),
+                    urlToIcon.getText(),
+                    urlToConfig.getText(),
+                    processName.getText(),
+                    excludeCliCheckbox.isSelected() + "");
+        };
+        compile.setActionListener((e) -> {
+            buttonActionListener.actionPerformed(e);
+            compile.setText("doing...");
+            compile.setActionListener((a) -> {});
+        });
 
         cmdOutput = new JTextArea("I'm output text area");
         cmdOutput.setBackground(bottomBackgroundColor);
@@ -176,5 +190,15 @@ public class Menu extends JFrame implements CommandOutput {
     @Override
     public void write(String res) {
         cmdOutput.setText(res);
+    }
+
+    @Override
+    public void done() {
+        compile.setText("compile");
+        compile.setActionListener((e) -> {
+            buttonActionListener.actionPerformed(e);
+            compile.setText("doing...");
+            compile.setActionListener((a) -> {});
+        });
     }
 }

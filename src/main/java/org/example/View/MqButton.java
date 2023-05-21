@@ -10,21 +10,20 @@ import java.awt.image.BufferedImage;
 public class MqButton extends JComponent {
     private ActionListener listener;
     private Color background;
-    private final String text;
+    private JLabel text;
     private BufferedImage image;
 
     public MqButton(String text, Color backgroundColor, Dimension size){
-        this.text = text;
+        this.text = new JLabel(text);
         this.background = backgroundColor;
         listener = (e) -> {};
         setPreferredSize(size);
         setLayout(new BorderLayout());
-        add(new JLabel(text), BorderLayout.CENTER);
+        add(this.text, BorderLayout.CENTER);
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 listener.actionPerformed(null);
-                paintPressedComponent(getGraphics());
             }
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -35,6 +34,9 @@ public class MqButton extends JComponent {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
+    }
+    public void setText(String text){
+        this.text.setText(text);
     }
     public MqButton(BufferedImage image, Dimension size){
         text = null;
@@ -71,18 +73,5 @@ public class MqButton extends JComponent {
         }
         else
             g.drawImage(image,0,0,getWidth(),getHeight(),null);
-    }
-    protected void paintPressedComponent(Graphics g) {
-        super.paintComponent(g);
-        g.setColor(background.darker());
-        g.fillRect(0,0,getWidth(),getHeight());
-        new Thread(() -> {
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            repaint();
-        }).start();
     }
 }
