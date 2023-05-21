@@ -1,5 +1,9 @@
 package org.example.View;
 
+import org.example.interfaces.CommandInterpreter;
+import org.example.interfaces.CommandOutput;
+import org.example.logic.Compiler;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -9,7 +13,8 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-public class Menu extends JFrame {
+public class Menu extends JFrame implements CommandOutput {
+    private final JTextArea cmdOutput;
     private final GridBagConstraints locator;
     public Menu(String initUrlToJar) throws IOException {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -126,7 +131,12 @@ public class Menu extends JFrame {
                 urlToConfig.setText(fileChooser.getSelectedFile().getPath());
         });
 
-        JTextArea cmdOutput = new JTextArea("I'm output text area");
+        CommandInterpreter interpreter = new Compiler();
+        compile.setActionListener((e) ->
+            interpreter.run(this, urlToJar.getText(), urlToExe.getText(), urlToIcon.getText(), urlToConfig.getText(), excludeCliCheckbox.isSelected()+"")
+        );
+
+        cmdOutput = new JTextArea("I'm output text area");
         cmdOutput.setBackground(bottomBackgroundColor);
         cmdOutput.setForeground(textColor);
 
@@ -161,5 +171,10 @@ public class Menu extends JFrame {
         locator.gridwidth = width;
         locator.gridheight = height;
         return locator;
+    }
+
+    @Override
+    public void write(String res) {
+        cmdOutput.setText(res);
     }
 }

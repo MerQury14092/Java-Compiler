@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.View.Menu;
+import org.example.interfaces.CommandOutput;
 
 import java.io.IOException;
 
