@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="761dc5b2-bdae-416a-af38-2f5d0dfe854a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/View/MqButton.java" afterDir="false" />
+    <list default="true" id="761dc5b2-bdae-416a-af38-2f5d0dfe854a" name="Changes" comment="GUI Done">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/fileChooser.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/View/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/View/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/View/MqButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/View/MqButton.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +39,7 @@
     </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="e83b98e910576a13202509f5646cf8b02ef69d2b" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
