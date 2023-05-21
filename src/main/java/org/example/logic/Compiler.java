@@ -3,6 +3,8 @@ package org.example.logic;
 import org.example.interfaces.CommandInterpreter;
 import org.example.interfaces.CommandOutput;
 
+import java.io.IOException;
+
 public class Compiler implements CommandInterpreter {
 
     private CommandOutput output;
@@ -19,6 +21,7 @@ public class Compiler implements CommandInterpreter {
      */
     @Override
     public void run(CommandOutput output, String... args) {
+        this.output = output;
         urlToJar = args[0];
         urlToExe = args[1];
         if(args[2].isEmpty())
@@ -41,6 +44,15 @@ public class Compiler implements CommandInterpreter {
     }
 
     private void compile(){
-
+        try {
+            Process builder = Runtime.getRuntime().exec(new String[]{
+                    "\"%comspec%\"",
+                    "/k",
+                    String.format("\"\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" && native-image --no-fallback --enable-url-protocols=https -jar %s -Djava.awt.headless=false\"",
+                            urlToJar)
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
