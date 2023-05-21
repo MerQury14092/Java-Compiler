@@ -1,12 +1,16 @@
 package org.example.View;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class Menu extends JFrame {
     private GridBagConstraints locator;
-    public Menu(){
+    public Menu() throws IOException {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         GridBagLayout gridLayout = new GridBagLayout();
@@ -15,10 +19,13 @@ public class Menu extends JFrame {
         gridLayout.columnWidths = IntStream.generate(() -> dotSize).limit(16).toArray();
         gridLayout.rowHeights = IntStream.generate(() -> dotSize).limit(22).toArray();
         setTitle("JCompiler");
+        setIconImage(ImageIO.read(Objects.requireNonNull(Menu.class.getResourceAsStream("/ico.png"))).getSubimage(160,160,640-160*2,640-160*2));
 
         locator = new GridBagConstraints();
 
         JFileChooser fileChooser = new JFileChooser();
+
+        BufferedImage logo = ImageIO.read(Objects.requireNonNull(Menu.class.getResourceAsStream("/merq_logo.png"))).getSubimage(134,134,768-134*2,768-134*2);
 
         Color topBackgroundColor = new Color(79,80,84);
         Color centerBackgroundColor = new Color(32,33,37);
@@ -73,6 +80,9 @@ public class Menu extends JFrame {
         useCustomConfigCheckbox.setBackground(centerBackgroundColor);
         useCustomConfigText.setForeground(textColor);
 
+        JLabel logoLabel = new JLabel();
+        logoLabel.setIcon(new ImageIcon(logo.getScaledInstance(84,84,Image.SCALE_SMOOTH)));
+
         JPanel topBackground = new JPanel();
         topBackground.setPreferredSize(new Dimension(16*dotSize, 4*dotSize));
         topBackground.setBackground(topBackgroundColor);
@@ -98,6 +108,7 @@ public class Menu extends JFrame {
         add(urlToExe, grid(1,7,12,1));
         add(urlToIcon, grid(1,9,12,1));
         add(processName, grid(1,11,12,1));
+        add(logoLabel, grid(0,0,4,4));
 
         add(topBackground, grid(0,0,16,4));
         add(cmdBackground, grid(0,18,16,4));
