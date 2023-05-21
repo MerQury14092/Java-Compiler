@@ -23,36 +23,67 @@ public class Menu extends JFrame {
         Color topBackgroundColor = new Color(79,80,84);
         Color centerBackgroundColor = new Color(32,33,37);
         Color bottomBackgroundColor = new Color(22,23,27);
+        Color textColor = new Color(145,146,150);
+        Color textFieldBackgroundColor = new Color(230,230,230);
 
         JLabel author = new JLabel("Created by MerQury");
+
         JLabel title = new JLabel("Java Compiler");
         title.setForeground(new Color(1,176,117));
         title.setFont(new Font(author.getFont().getName(), Font.BOLD, 25));
-        JTextField urlToJar = new JTextField("jar",22);
-        JTextField urlToExe = new JTextField("exe",22);
-        JTextField urlToIcon = new JTextField("ico",22);
-        JTextField urlToConfig = new JTextField("json",22);
-        JTextField processName = new JTextField("name",22);
+
+        PlaceholderTextField urlToJar = new PlaceholderTextField(22);
+        urlToJar.setPlaceholder("Path to jar");
+
+        PlaceholderTextField urlToExe = new PlaceholderTextField(22);
+        urlToExe.setPlaceholder("Path to output exe");
+
+        PlaceholderTextField urlToIcon = new PlaceholderTextField(22);
+        urlToIcon.setPlaceholder("Path to icon");
+
+        PlaceholderTextField urlToConfig = new PlaceholderTextField(22);
+        urlToConfig.setPlaceholder("Path to config");
+
+        PlaceholderTextField processName = new PlaceholderTextField(22);
+        processName.setPlaceholder("Process name");
+
+        urlToJar.setBorder(null);
+        urlToJar.setBackground(textFieldBackgroundColor);
+
+        urlToExe.setBorder(null);
+        urlToExe.setBackground(textFieldBackgroundColor);
+
+        urlToIcon.setBorder(null);
+        urlToIcon.setBackground(textFieldBackgroundColor);
+
+        urlToConfig.setBorder(null);
+        urlToConfig.setBackground(textFieldBackgroundColor);
+
+        processName.setBorder(null);
+        processName.setBackground(textFieldBackgroundColor);
 
         JCheckBox excludeCliCheckbox = new JCheckBox();
         excludeCliCheckbox.setBackground(centerBackgroundColor);
-        JLabel excludeCliText = new JLabel("Exclude CLI");
-        excludeCliText.setForeground(Color.WHITE);
+
+        JLabel excludeCliText = new JLabel("Exclude CLI  ");
+        excludeCliText.setForeground(textColor);
         JCheckBox useCustomConfigCheckbox = new JCheckBox();
+
         JLabel useCustomConfigText = new JLabel("Use custom config (required for reflection)");
         useCustomConfigCheckbox.setBackground(centerBackgroundColor);
-        useCustomConfigText.setForeground(Color.white);
+        useCustomConfigText.setForeground(textColor);
 
         JPanel topBackground = new JPanel();
         topBackground.setPreferredSize(new Dimension(16*dotSize, 4*dotSize));
         topBackground.setBackground(topBackgroundColor);
+
         JPanel centerBackground = new JPanel();
         centerBackground.setPreferredSize(new Dimension(16*dotSize, 22*dotSize));
         centerBackground.setBackground(centerBackgroundColor);
+
         JPanel cmdBackground = new JPanel();
         cmdBackground.setPreferredSize(new Dimension(16*dotSize, 4*dotSize));
         cmdBackground.setBackground(bottomBackgroundColor);
-
 
         JButton compile = new JButton("Compile");
 
@@ -62,7 +93,7 @@ public class Menu extends JFrame {
         add(excludeCliCheckbox, grid(1,15,1,1));
         add(useCustomConfigCheckbox, grid(1,13,1,1));
         add(excludeCliText, grid(2,15,4,1));
-        add(useCustomConfigText, grid(2,13,13,1));
+        add(useCustomConfigText, grid(2,13,12,1));
         add(urlToJar, grid(1,5,12,1));
         add(urlToExe, grid(1,7,12,1));
         add(urlToIcon, grid(1,9,12,1));
