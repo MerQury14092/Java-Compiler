@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class Menu extends JFrame {
-    private GridBagConstraints locator;
+    private final GridBagConstraints locator;
     public Menu(String initUrlToJar) throws IOException {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -153,14 +153,6 @@ public class Menu extends JFrame {
 
         pack();
         setLocationRelativeTo(null);
-    }
-
-    private GridBagConstraints grid(int x, int y){
-        locator.gridx = x;
-        locator.gridy = y;
-        locator.gridwidth = 1;
-        locator.gridheight = 1;
-        return locator;
     }
 
     private GridBagConstraints grid(int x, int y, int width, int height){

@@ -3,7 +3,6 @@ package org.example.View;
 import java.awt.*;
 
 import javax.swing.*;
-import javax.swing.text.Document;
 
 public class PlaceholderTextField extends JTextField {
 
@@ -14,10 +13,6 @@ public class PlaceholderTextField extends JTextField {
     }
     public PlaceholderTextField(final int pColumns){
         super(pColumns);
-    }
-
-    public String getPlaceholder() {
-        return placeholder;
     }
 
     @Override

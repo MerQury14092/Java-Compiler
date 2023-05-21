@@ -2,7 +2,6 @@ package org.example.View;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -11,7 +10,7 @@ import java.awt.image.BufferedImage;
 public class MqButton extends JComponent {
     private ActionListener listener;
     private Color background;
-    private String text;
+    private final String text;
     private BufferedImage image;
 
     public MqButton(String text, Color backgroundColor, Dimension size){
@@ -43,7 +42,6 @@ public class MqButton extends JComponent {
         listener = (e) -> {};
         setPreferredSize(size);
         setLayout(new BorderLayout());
-        add(new JLabel(text), BorderLayout.CENTER);
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
