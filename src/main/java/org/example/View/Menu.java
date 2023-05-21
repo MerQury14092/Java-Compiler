@@ -95,7 +95,7 @@ public class Menu extends JFrame {
         cmdBackground.setPreferredSize(new Dimension(16*dotSize, 4*dotSize));
         cmdBackground.setBackground(bottomBackgroundColor);
 
-        JButton compile = new JButton("Compile");
+        MqButton compile = new MqButton("Compile", Color.white, new Dimension(60,20));
 
         add(author, grid(8,0,10,1));
         add(title, grid(4,1,9,2));
