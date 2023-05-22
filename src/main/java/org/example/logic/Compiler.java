@@ -24,15 +24,15 @@ public class Compiler implements CommandInterpreter {
         this.output = output;
         urlToJar = args[0];
         urlToExe = args[1];
-        if(args[2].isEmpty())
+        if (args[2].isEmpty())
             urlToIco = null;
         else
             urlToIco = args[2];
-        if(args[3].isEmpty())
+        if (args[3].isEmpty())
             urlToJson = null;
         else
             urlToJson = args[3];
-        if(args[4].isEmpty())
+        if (args[4].isEmpty())
             processName = null;
         else
             processName = args[4];
@@ -43,9 +43,9 @@ public class Compiler implements CommandInterpreter {
         }).start();
     }
 
-    private void compile(){
+    private void compile() {
         // Установите путь к vcvars64.bat файлу
-        String vcvarsPath = "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat";
+        String vcvarsPath = "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"";
 
         // Установите путь к jar-файлу
         String jarPath = "C:\\path\\to\\your\\jar\\file.jar";
@@ -53,24 +53,33 @@ public class Compiler implements CommandInterpreter {
         try {
             ProcessBuilder builder = new ProcessBuilder();
 
-            builder.directory(new File("C:\\Users\\MerQury\\Desktop\\asd"));
-
             System.out.println(urlToJar);
 
-            builder.command("cmd.exe", "/c", "call", vcvarsPath, "&&", "native-image", "--no-fallback",
-                    "--enable-url-protocols=https", "-jar", urlToJar, "-Djava.awt.headless=false");
+            builder.command("cmd", "/c", String.format("\"%s && native-image %s%s%s%s--no-fallback --enable-url-protocols=https -jar %s -Djava.awt.headless=false\"",
+                    vcvarsPath,
+                    /*urlToIco == null ? "" : "--icon=\"" + urlToIco + "\" "*/"",
+                    /*urlToJson == null ? "" : "-H:ReflectionConfigurationFiles=\"" + urlToJson + "\" "*/"",
+                    /*processName == null ? "" : "--name=\"" + processName + "\" "*/"",
+                    /*"\"" + urlToExe + "\""*/"",
+                    "\"" + urlToJar + "\""));
+
 
             Process process = builder.start();
-
-            int exitCode = process.waitFor();
-
             InputStream in = process.getInputStream();
+            while (process.isAlive()) {
+                if (in.available() > 0)
+                    System.out.println(new String(in.readAllBytes(), "cp866"));
+            }
+            if (process.exitValue() != 0) {
+                InputStream inEr = process.getErrorStream();
+                output.write("Compilation error");
+                System.out.println("Произошла ошикба:");
+                System.out.println(new String(inEr.readAllBytes(), "cp866"));
+            } else
+                output.write("Compilation success");
 
-            System.out.write(in.readAllBytes());
-            System.out.flush();
 
-            System.out.println("Код завершения: " + exitCode);
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

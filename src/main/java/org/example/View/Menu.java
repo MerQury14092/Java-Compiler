@@ -106,8 +106,10 @@ public class Menu extends JFrame implements CommandOutput {
         jarFileChoose.setActionListener((e) -> {
             fileChooser.setAcceptAllFileFilterUsed(false);
             fileChooser.setFileFilter(new FileNameExtensionFilter("Jar files", "jar"));
-            if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+            if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 urlToJar.setText(fileChooser.getSelectedFile().getPath());
+                urlToExe.setText(urlToJar.getText().replace(".jar",".exe"));
+            }
         });
 
         MqButton exeFileChoose = new MqButton(fileChooserIcon, new Dimension(21,21));
