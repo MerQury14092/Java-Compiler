@@ -3,7 +3,7 @@ package org.example.logic;
 import org.example.interfaces.CommandInterpreter;
 import org.example.interfaces.CommandOutput;
 
-import java.io.IOException;
+import java.io.*;
 
 public class Compiler implements CommandInterpreter {
 
@@ -44,15 +44,34 @@ public class Compiler implements CommandInterpreter {
     }
 
     private void compile(){
+        // Установите путь к vcvars64.bat файлу
+        String vcvarsPath = "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat";
+
+        // Установите путь к jar-файлу
+        String jarPath = "C:\\path\\to\\your\\jar\\file.jar";
+
         try {
-            Process builder = Runtime.getRuntime().exec(new String[]{
-                    "\"%comspec%\"",
-                    "/k",
-                    String.format("\"\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" && native-image --no-fallback --enable-url-protocols=https -jar %s -Djava.awt.headless=false\"",
-                            urlToJar)
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            ProcessBuilder builder = new ProcessBuilder();
+
+            builder.directory(new File("C:\\Users\\MerQury\\Desktop\\asd"));
+
+            System.out.println(urlToJar);
+
+            builder.command("cmd.exe", "/c", "call", vcvarsPath, "&&", "native-image", "--no-fallback",
+                    "--enable-url-protocols=https", "-jar", urlToJar, "-Djava.awt.headless=false");
+
+            Process process = builder.start();
+
+            int exitCode = process.waitFor();
+
+            InputStream in = process.getInputStream();
+
+            System.out.write(in.readAllBytes());
+            System.out.flush();
+
+            System.out.println("Код завершения: " + exitCode);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
