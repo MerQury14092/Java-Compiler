@@ -4,6 +4,7 @@ import org.example.interfaces.CommandInterpreter;
 import org.example.interfaces.CommandOutput;
 
 import java.io.*;
+import java.util.Scanner;
 
 public class Compiler implements CommandInterpreter {
 
@@ -65,11 +66,17 @@ public class Compiler implements CommandInterpreter {
 
 
             Process process = builder.start();
-            InputStream in = process.getInputStream();
-            while (process.isAlive()) {
-                if (in.available() > 0)
-                    System.out.println(new String(in.readAllBytes(), "cp866"));
-            }
+            new Thread(() -> {
+                Scanner sc = new Scanner(process.getInputStream());
+                while (process.isAlive()) {
+                    if(sc.hasNextLine()) {
+                        String str = sc.nextLine();
+                        System.out.println(str);
+                        handleLine(str, output);
+                    }
+                }
+            }).start();
+            process.waitFor();
             if (process.exitValue() != 0) {
                 InputStream inEr = process.getErrorStream();
                 output.write("Compilation error");
@@ -81,6 +88,30 @@ public class Compiler implements CommandInterpreter {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void handleLine(String line, CommandOutput output){
+        if(line.contains("[1/7] Initializing..."))
+            output.write("[1/7] Initializing...");
+        else if (line.contains("GraalVM Native Image: Generating")) {
+            output.write(line.replace("GraalVM Native Image: ",""));
+        } else if (line.contains("[2/7] Performing analysis...")){
+            output.write("[2/7] Performing analysis...");
+        } else if (line.contains("[3/7] Building universe...")) {
+            output.write("[3/7] Building universe...");
+        } else if (line.contains("[4/7] Parsing methods...")) {
+            output.write("[4/7] Parsing methods...");
+        } else if (line.contains("[5/7] Inlining methods...")) {
+            output.write("[5/7] Inlining methods...");
+        } else if (line.contains("[6/7] Compiling methods...")) {
+            output.write("[6/7] Compiling methods...");
+        } else if (line.contains("[7/7] Creating image...")) {
+            output.write("[7/7] Creating image...");
+        } else if (line.contains("Finished generating")) {
+            output.write(line);
         }
     }
 }
