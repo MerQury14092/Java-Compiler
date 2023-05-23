@@ -48,21 +48,18 @@ public class Compiler implements CommandInterpreter {
         // Установите путь к vcvars64.bat файлу
         String vcvarsPath = "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"";
 
-        // Установите путь к jar-файлу
-        String jarPath = "C:\\path\\to\\your\\jar\\file.jar";
-
         try {
             ProcessBuilder builder = new ProcessBuilder();
 
-            System.out.println(urlToJar);
-
-            builder.command("cmd", "/c", String.format("\"%s && native-image %s%s%s%s--no-fallback --enable-url-protocols=https -jar %s -Djava.awt.headless=false\"",
+            builder.command("cmd", "/c", String.format("\"%s && native-image %s%s%s-H:Path=%s -H:Name=%s --no-fallback --enable-url-protocols=https -jar %s -Djava.awt.headless=false%s\"",
                     vcvarsPath,
                     /*urlToIco == null ? "" : "--icon=\"" + urlToIco + "\" "*/"",
-                    /*urlToJson == null ? "" : "-H:ReflectionConfigurationFiles=\"" + urlToJson + "\" "*/"",
+                    urlToJson == null ? "" : "-H:ReflectionConfigurationFiles=\"" + urlToJson + "\" ",
                     /*processName == null ? "" : "--name=\"" + processName + "\" "*/"",
-                    /*"\"" + urlToExe + "\""*/"",
-                    "\"" + urlToJar + "\""));
+                    "\"" + strArrToStr(urlToExe.split("\\\\"), urlToExe.split("\\\\").length-2) + "\"",
+                    "\"" + urlToExe.split("\\\\")[urlToExe.split("\\\\").length-1].replace(".exe","") + "\"",
+                    "\"" + urlToJar + "\"",
+                    excludeCli?" && editbin /SUBSYSTEM:WINDOWS "+urlToExe:""));
 
 
             Process process = builder.start();
@@ -82,15 +79,23 @@ public class Compiler implements CommandInterpreter {
                 output.write("Compilation error");
                 System.out.println("Произошла ошикба:");
                 System.out.println(new String(inEr.readAllBytes(), "cp866"));
-            } else
-                output.write("Compilation success");
-
+            }
+            process.destroy();
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Обрезает массив до end, включая и клеит всё в одну строку, включая между элементами разделитель \
+    private String strArrToStr(String[] arr, int end){
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i <= end; i++) {
+            res.append(arr[i]).append(i != end ? '\\' : "");
+        }
+        return res.toString();
     }
 
     private void handleLine(String line, CommandOutput output){
