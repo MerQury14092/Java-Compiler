@@ -1,6 +1,5 @@
 package org.example.View;
 
-import org.example.interfaces.CommandInterpreter;
 import org.example.interfaces.CommandOutput;
 import org.example.logic.Compiler;
 
@@ -10,13 +9,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class Menu extends JFrame implements CommandOutput {
     private final JTextArea cmdOutput;
-    private MqButton compile;
+    private final MqButton compile;
     private final ActionListener buttonActionListener;
     private final GridBagConstraints locator;
     public Menu(String initUrlToJar) throws IOException {
@@ -115,6 +115,7 @@ public class Menu extends JFrame implements CommandOutput {
         MqButton exeFileChoose = new MqButton(fileChooserIcon, new Dimension(21,21));
         exeFileChoose.setActionListener((e) -> {
             fileChooser.setAcceptAllFileFilterUsed(false);
+            fileChooser.setSelectedFile(new File(urlToJar.getText().replace(".jar",".exe")));
             fileChooser.setFileFilter(new FileNameExtensionFilter("Executable files", "exe"));
             if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 urlToExe.setText(fileChooser.getSelectedFile().getPath());
@@ -123,6 +124,7 @@ public class Menu extends JFrame implements CommandOutput {
         MqButton icoFileChoose = new MqButton(fileChooserIcon, new Dimension(21,21));
         icoFileChoose.setActionListener((e) -> {
             fileChooser.setAcceptAllFileFilterUsed(false);
+            fileChooser.setSelectedFile(new File(urlToJar.getText().replace(".jar",".ico")));
             fileChooser.setFileFilter(new FileNameExtensionFilter("Ico files", "ico"));
             if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 urlToIcon.setText(fileChooser.getSelectedFile().getPath());
@@ -131,13 +133,14 @@ public class Menu extends JFrame implements CommandOutput {
         MqButton configFileChoose = new MqButton(fileChooserIcon, new Dimension(21,21));
         configFileChoose.setActionListener((e) -> {
             fileChooser.setAcceptAllFileFilterUsed(false);
+            fileChooser.setSelectedFile(new File(urlToJar.getText().replace(".jar",".json")));
             fileChooser.setFileFilter(new FileNameExtensionFilter("Config files", "json"));
             if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
                 urlToConfig.setText(fileChooser.getSelectedFile().getPath());
         });
 
         Compiler interpreter = new Compiler();
-        buttonActionListener = (e) -> {
+        buttonActionListener = (e) ->
             interpreter.run(this,
                     urlToJar.getText(),
                     urlToExe.getText(),
@@ -145,7 +148,6 @@ public class Menu extends JFrame implements CommandOutput {
                     urlToConfig.getText(),
                     processName.getText(),
                     excludeCliCheckbox.isSelected() + "");
-        };
         compile.setActionListener((e) -> {
             buttonActionListener.actionPerformed(e);
             compile.setText("doing...");
