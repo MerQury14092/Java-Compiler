@@ -7,12 +7,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -55,6 +55,24 @@ public class Menu extends JFrame implements CommandOutput, WindowListener {
 
         JLabel author = new JLabel("Created by MerQury");
         author.setFont(jetbrains_mono);
+        author.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/MerQury14092"));
+                } catch (IOException | URISyntaxException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
 
         JLabel title = new JLabel("Java Compiler");
         title.setFont(jetbrains_mono.deriveFont(Font.BOLD, 24));
@@ -129,6 +147,8 @@ public class Menu extends JFrame implements CommandOutput, WindowListener {
         MqButton jarFileChoose = new MqButton(fileChooserIcon, new Dimension(21, 21));
         jarFileChoose.setActionListener((e) -> {
             fileChooser.setAcceptAllFileFilterUsed(false);
+            if (!urlToExe.getText().isEmpty())
+                fileChooser.setSelectedFile(new File(urlToJar.getText()));
             fileChooser.setFileFilter(new FileNameExtensionFilter("Jar files", "jar"));
             if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 urlToJar.setText(fileChooser.getSelectedFile().getPath());
