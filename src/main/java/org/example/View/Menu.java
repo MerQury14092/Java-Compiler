@@ -8,18 +8,23 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-public class Menu extends JFrame implements CommandOutput {
+public class Menu extends JFrame implements CommandOutput, WindowListener {
     private final JTextArea cmdOutput;
     private final MqButton compile;
     private final ActionListener buttonActionListener;
+    private final Font jetbrains_mono;
+    private final Compiler interpreter;
     private final GridBagConstraints locator;
-    public Menu(String initUrlToJar) throws IOException {
+    public Menu(String initUrlToJar) throws IOException, FontFormatException {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         GridBagLayout gridLayout = new GridBagLayout();
@@ -29,13 +34,18 @@ public class Menu extends JFrame implements CommandOutput {
         gridLayout.rowHeights = IntStream.generate(() -> dotSize).limit(22).toArray();
         setTitle("JCompiler");
         setIconImage(ImageIO.read(Objects.requireNonNull(Menu.class.getResourceAsStream("/ico.png"))).getSubimage(160,160,640-160*2,640-160*2));
+        addWindowListener(this);
 
         locator = new GridBagConstraints();
 
         JFileChooser fileChooser = new JFileChooser();
 
+        interpreter = new Compiler();
+
         BufferedImage logo = ImageIO.read(Objects.requireNonNull(Menu.class.getResourceAsStream("/merq_logo.png"))).getSubimage(134,134,768-134*2,768-134*2);
         BufferedImage fileChooserIcon = ImageIO.read(Objects.requireNonNull(Menu.class.getResourceAsStream("/fileChooser.png")));
+
+        jetbrains_mono = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(getClass().getResourceAsStream("/font.ttf"))).deriveFont(Font.PLAIN, 12);
 
         Color topBackgroundColor = new Color(79,80,84);
         Color centerBackgroundColor = new Color(32,33,37);
@@ -44,24 +54,36 @@ public class Menu extends JFrame implements CommandOutput {
         Color textFieldBackgroundColor = new Color(230,230,230);
 
         JLabel author = new JLabel("Created by MerQury");
+        author.setFont(jetbrains_mono);
 
         JLabel title = new JLabel("Java Compiler");
+        title.setFont(jetbrains_mono.deriveFont(Font.BOLD, 24));
         title.setForeground(new Color(1,176,117));
-        title.setFont(new Font(author.getFont().getName(), Font.BOLD, 25));
+        //title.setFont(new Font(author.getFont().getName(), Font.BOLD, 25));
 
         PlaceholderTextField urlToJar = new PlaceholderTextField(initUrlToJar,22);
+        urlToJar.setFont(jetbrains_mono);
+        urlToJar.setColumns(35);
         urlToJar.setPlaceholder("Path to jar (required)");
 
         PlaceholderTextField urlToExe = new PlaceholderTextField(initUrlToJar.replace(".jar",".exe"),22);
+        urlToExe.setFont(jetbrains_mono);
+        urlToExe.setColumns(35);
         urlToExe.setPlaceholder("Path to output exe (required)");
 
         PlaceholderTextField urlToIcon = new PlaceholderTextField(22);
+        urlToIcon.setFont(jetbrains_mono);
+        urlToIcon.setColumns(35);
         urlToIcon.setPlaceholder("Path to icon (optional)");
 
         PlaceholderTextField urlToConfig = new PlaceholderTextField(22);
+        urlToConfig.setFont(jetbrains_mono);
+        urlToConfig.setColumns(35);
         urlToConfig.setPlaceholder("Path to config (optional)");
 
         PlaceholderTextField processName = new PlaceholderTextField(22);
+        processName.setFont(jetbrains_mono);
+        processName.setColumns(35);
         processName.setPlaceholder("Process name (optional)");
 
         urlToJar.setBorder(null);
@@ -83,6 +105,7 @@ public class Menu extends JFrame implements CommandOutput {
         excludeCliCheckbox.setBackground(centerBackgroundColor);
 
         JLabel excludeCliText = new JLabel("Exclude CLI  ");
+        excludeCliText.setFont(jetbrains_mono.deriveFont(Font.PLAIN, 12));
         excludeCliText.setForeground(textColor);
 
         JLabel logoLabel = new JLabel();
@@ -101,6 +124,7 @@ public class Menu extends JFrame implements CommandOutput {
         cmdBackground.setBackground(bottomBackgroundColor);
 
         compile = new MqButton("compile", Color.white, new Dimension(60,20));
+        compile.setFont(jetbrains_mono.deriveFont(Font.PLAIN, 12));
 
         MqButton jarFileChoose = new MqButton(fileChooserIcon, new Dimension(21,21));
         jarFileChoose.setActionListener((e) -> {
@@ -123,11 +147,12 @@ public class Menu extends JFrame implements CommandOutput {
 
         MqButton icoFileChoose = new MqButton(fileChooserIcon, new Dimension(21,21));
         icoFileChoose.setActionListener((e) -> {
-            fileChooser.setAcceptAllFileFilterUsed(false);
+            /*fileChooser.setAcceptAllFileFilterUsed(false);
             fileChooser.setSelectedFile(new File(urlToJar.getText().replace(".jar",".ico")));
             fileChooser.setFileFilter(new FileNameExtensionFilter("Ico files", "ico"));
             if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-                urlToIcon.setText(fileChooser.getSelectedFile().getPath());
+                urlToIcon.setText(fileChooser.getSelectedFile().getPath());*/
+            interpreter.interrupt();
         });
 
         MqButton configFileChoose = new MqButton(fileChooserIcon, new Dimension(21,21));
@@ -139,7 +164,6 @@ public class Menu extends JFrame implements CommandOutput {
                 urlToConfig.setText(fileChooser.getSelectedFile().getPath());
         });
 
-        Compiler interpreter = new Compiler();
         buttonActionListener = (e) ->
             interpreter.run(this,
                     urlToJar.getText(),
@@ -155,14 +179,15 @@ public class Menu extends JFrame implements CommandOutput {
         });
 
         cmdOutput = new JTextArea("I'm output text area");
+        cmdOutput.setFont(jetbrains_mono.deriveFont(Font.PLAIN, 13));
         cmdOutput.setBackground(bottomBackgroundColor);
         cmdOutput.setForeground(textColor);
 
         add(author, grid(8,0,10,1));
-        add(title, grid(4,1,9,2));
+        add(title, grid(4,1,10,2));
         add(compile, grid(11,16,4,1));
         add(excludeCliCheckbox, grid(1,15,1,1));
-        add(excludeCliText, grid(2,15,4,1));
+        add(excludeCliText, grid(2,15,5,1));
         add(urlToJar, grid(1,5,12,1));
         add(jarFileChoose, grid(14,5,1,1));
         add(urlToExe, grid(1,7,12,1));
@@ -173,7 +198,7 @@ public class Menu extends JFrame implements CommandOutput {
         add(configFileChoose, grid(14,11,1,1));
         add(processName, grid(1,13,12,1));
         add(logoLabel, grid(0,0,4,4));
-        add(cmdOutput, grid(1,19,14,1));
+        add(cmdOutput, grid(0,19,22,1));
 
         add(topBackground, grid(0,0,16,4));
         add(cmdBackground, grid(0,18,16,4));
@@ -205,4 +230,22 @@ public class Menu extends JFrame implements CommandOutput {
             compile.setActionListener((a) -> {});
         });
     }
+
+    @Override
+    public void windowOpened(WindowEvent e) {}
+    @Override
+    public void windowClosing(WindowEvent e) {
+        interpreter.interrupt();
+    }
+    @Override
+    public void windowClosed(WindowEvent e) {}
+
+    @Override
+    public void windowIconified(WindowEvent e) {}
+    @Override
+    public void windowDeiconified(WindowEvent e) {}
+    @Override
+    public void windowActivated(WindowEvent e) {}
+    @Override
+    public void windowDeactivated(WindowEvent e) {}
 }

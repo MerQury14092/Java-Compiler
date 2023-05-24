@@ -10,6 +10,7 @@ public class Compiler implements CommandInterpreter {
 
     private CommandOutput output;
     private String urlToJar, urlToExe, urlToIco, urlToJson, processName;
+    private Process process;
     private boolean excludeCli;
 
     /**
@@ -44,6 +45,11 @@ public class Compiler implements CommandInterpreter {
         }).start();
     }
 
+    @Override
+    public void interrupt() {
+        // TODO: 24.05.2023 CREATE INTERRUPT PROCESS COMPILATION
+    }
+
     private void compile() {
         // Установите путь к vcvars64.bat файлу
         String vcvarsPath = "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"";
@@ -56,17 +62,17 @@ public class Compiler implements CommandInterpreter {
                     /*urlToIco == null ? "" : "--icon=\"" + urlToIco + "\" "*/"",
                     urlToJson == null ? "" : "-H:ReflectionConfigurationFiles=\"" + urlToJson + "\" ",
                     /*processName == null ? "" : "--name=\"" + processName + "\" "*/"",
-                    "\"" + strArrToStr(urlToExe.split("\\\\"), urlToExe.split("\\\\").length-2) + "\"",
-                    "\"" + urlToExe.split("\\\\")[urlToExe.split("\\\\").length-1].replace(".exe","") + "\"",
+                    "\"" + strArrToStr(urlToExe.split("\\\\"), urlToExe.split("\\\\").length - 2) + "\"",
+                    "\"" + urlToExe.split("\\\\")[urlToExe.split("\\\\").length - 1].replace(".exe", "") + "\"",
                     "\"" + urlToJar + "\"",
-                    excludeCli?" && editbin /SUBSYSTEM:WINDOWS "+urlToExe:""));
+                    excludeCli ? " && editbin /SUBSYSTEM:WINDOWS " + urlToExe : ""));
 
 
-            Process process = builder.start();
+            process = builder.start();
             new Thread(() -> {
                 Scanner sc = new Scanner(process.getInputStream());
                 while (process.isAlive()) {
-                    if(sc.hasNextLine()) {
+                    if (sc.hasNextLine()) {
                         String str = sc.nextLine();
                         System.out.println(str);
                         handleLine(str, output);
@@ -90,7 +96,7 @@ public class Compiler implements CommandInterpreter {
     }
 
     // Обрезает массив до end, включая и клеит всё в одну строку, включая между элементами разделитель \
-    private String strArrToStr(String[] arr, int end){
+    private String strArrToStr(String[] arr, int end) {
         StringBuilder res = new StringBuilder();
         for (int i = 0; i <= end; i++) {
             res.append(arr[i]).append(i != end ? '\\' : "");
@@ -98,12 +104,12 @@ public class Compiler implements CommandInterpreter {
         return res.toString();
     }
 
-    private void handleLine(String line, CommandOutput output){
-        if(line.contains("[1/7] Initializing..."))
+    private void handleLine(String line, CommandOutput output) {
+        if (line.contains("[1/7] Initializing..."))
             output.write("[1/7] Initializing...");
         else if (line.contains("GraalVM Native Image: Generating")) {
-            output.write(line.replace("GraalVM Native Image: ",""));
-        } else if (line.contains("[2/7] Performing analysis...")){
+            output.write("Compilation started");
+        } else if (line.contains("[2/7] Performing analysis...")) {
             output.write("[2/7] Performing analysis...");
         } else if (line.contains("[3/7] Building universe...")) {
             output.write("[3/7] Building universe...");
@@ -116,7 +122,7 @@ public class Compiler implements CommandInterpreter {
         } else if (line.contains("[7/7] Creating image...")) {
             output.write("[7/7] Creating image...");
         } else if (line.contains("Finished generating")) {
-            output.write(line);
+            output.write("Compilation finished");
         }
     }
 }

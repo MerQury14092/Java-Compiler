@@ -10,10 +10,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="761dc5b2-bdae-416a-af38-2f5d0dfe854a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/font.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/java_compiler_jar/java_compiler.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/java_compiler_jar/java_compiler.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/View/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/View/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/View/MqButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/View/MqButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/interfaces/CommandInterpreter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/interfaces/CommandInterpreter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/Compiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Compiler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -206,7 +209,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684760014697</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Bug fixes">
+      <created>1684912144244</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1684912144244</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -220,7 +230,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="HEAD" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>
@@ -261,13 +271,7 @@
     <MESSAGE value="first working version" />
     <MESSAGE value="Bug fixes. Ico, Exe, Process name, Config not work" />
     <MESSAGE value="dynamic display of data in the output field" />
-    <option name="LAST_COMMIT_MESSAGE" value="dynamic display of data in the output field" />
-  </component>
-  <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="builder.command" language="JAVA" />
-      </configuration>
-    </watches-manager>
+    <MESSAGE value="Bug fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bug fixes" />
   </component>
 </project>

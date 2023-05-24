@@ -38,6 +38,9 @@ public class MqButton extends JComponent {
     public void setText(String text){
         this.text.setText(text);
     }
+    public void setFont(Font font){
+        this.text.setFont(font);
+    }
     public MqButton(BufferedImage image, Dimension size){
         text = null;
         this.image = image;
