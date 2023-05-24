@@ -68,11 +68,24 @@ public class MqButton extends JComponent {
     }
 
     @Override
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);
+    protected void paintComponent(Graphics pG){
+        super.paintComponent(pG);
+        Graphics2D g = (Graphics2D) pG;
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         if(text != null) {
             g.setColor(background);
-            g.fillRect(0, 0, getWidth(), getHeight());
+            //g.fillRect(0, 0, getWidth(), getHeight());
+            g.fillOval(0,0,getHeight()/2, getHeight()/2);
+            g.fillOval(0, getHeight()/2, getHeight()/2, getHeight()/2);
+            g.fillOval(getWidth()-getHeight()/2,0,getHeight()/2, getHeight()/2);
+            g.fillOval(getWidth()-getHeight()/2, getHeight()/2, getHeight()/2, getHeight()/2);
+            g.fillRect(getHeight()/4,0,getWidth()-getHeight()/2,getHeight());
+            g.fillRect(0,getHeight()/4, getWidth(), getHeight()/2);
+
+            /*g.fillOval(0,0,getHeight(),getHeight());
+            g.fillOval(getWidth()-getHeight(),0,getHeight(),getHeight());
+            g.fillRect(getHeight()/2, 0, getWidth()-getHeight(), getHeight());
+            */
         }
         else
             g.drawImage(image,0,0,getWidth(),getHeight(),null);
